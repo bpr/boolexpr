@@ -22,13 +22,6 @@ We see the expression is what we expect:
 ```
 
 ### Input String Parsing ###
-
-Alternatively, we could have provided our expression as a String in prefix notation and parsed it.  We can verify that this expression is identical to the one we built manually:
-
-```scala
-    Expression<String> parsedExpression = RuleSet.simplify(ExprParser.parse("( ( (! C) | C) & A & B)"));
-    println(parsedExpression);
-    System.out.println(parsedExpression.equals(simplified));
 ```
 output:
 ```bash
@@ -40,12 +33,12 @@ true
 
 We can also convert expressions to sum-of-products form instead of just simplifying them.  For example:
 
-```java
-    Expression<String> nonStandard = ExprParser.parse("((A | B) & (C | D))");
-    System.out.println(nonStandard);
+```scala
+    val nonStandard = Parser.parseString("((A | B) & (C | D))");
+    println(nonStandard);
 
-    Expression<String> sopForm = RuleSet.toDNF(nonStandard);
-    System.out.println(sopForm);
+    val sopForm = RuleSet.toDNF(nonStandard);
+    println(sopForm);
 ```
 output:
 ```bash
@@ -57,12 +50,12 @@ output:
 
 Likewise, we can convert an expression to product-of-sums form.  For example:
 
-```java
-    Expression<String> nonStandard = ExprParser.parse("((A & B) | (C & D))");
-    System.out.println(nonStandard);
+```scala
+    val nonStandard = Parser.parse("((A & B) | (C & D))");
+    println(nonStandard);
 
-    Expression<String> posForm = RuleSet.toCNF(nonStandard);
-    System.out.println(posForm);
+    val posForm = BoolExpr.toCNF(nonStandard);
+    println(posForm);
 
 ```
 output:
@@ -72,76 +65,11 @@ output:
 ```
 
 
-All of these examples can also be found in [ExampleRunner](https://github.com/bpodgursky/jbool_expressions/blob/master/src/main/java/com/bpodgursky/jbool_expressions/example/ExampleRunner.java)
-
 Rules
 ====
 
-The current simplification rules define fairly simple and fast optimizations, and is defined in [RuleSet](https://github.com/bpodgursky/jbool_expressions/blob/master/src/main/java/com/bpodgursky/jbool_expressions/rules/RuleSet.java).
-I'm happy to add more sophisticated rules (let me know about them via a PR or issue).  The current rules include:
-
-Literal removal:
-
-```bash
-(false & A) => false
-(true & A) => A
-
-(false | A) => A
-(true | A) => true
-```
-
-Negation simplification:
-
-```bash
-(!!A ) => A
-(A & !A) => false
-(A | !A) => true
-```
-
-And / Or de-duplication and flattening:
-
-```bash
-(A & A & (B & C)) => (A & B & C)
-(A | A | (B | C)) => (A | B | C)
-```
-
-Child expression simplification:
-
-```bash
-(A | B) & (A | B | C) => (A | B)
-((A & B) | (A & B & C)) => (A & B)
-```
-
-Additional rules for converting to sum-of-products form:
-
-Propagating &:
-
-```bash
-( A & ( C | D)) => ((A & C) | (A & D))
-```
-
-De Morgan's law:
-
-```bash
-(! ( A | B)) => ( (! A) & (! B))
-```
-
 Building
 ====
-
-boolexpr is built with Maven.  To build from source,
-
-```bash
-> mvn package
-```
-
-generates a snapshot jar target/jbool_expressions-1.0-SNAPSHOT.jar.
-
-To run the test suite locally,
-
-```bash
-> sbt run
-```
 
 Development
 ====

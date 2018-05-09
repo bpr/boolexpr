@@ -8,20 +8,6 @@ import scala.collection.mutable.ArrayBuffer
  using a pseudo Scala notation for pattern matching. Worst case exponential
  time and space, so far well behaved in practice.
 
- Historical notes: This algorithm was derived in a rather haphazard way,
- the original, naive algorithm generated CNF and DNF from truth tables
- and so always incurred an exponential hit in the number of variables, and became
- unusable for more than 15 or 20 variables. Translation of
-
- https://github.com/bpodgursky/jbool_expressions
-
- into JS yielded a more promising approach, and is responsible for the use
- of classes. It applied a set of rules to a tree until it converged to a fixed
- point. That seemed to work but it was difficult to analyze.
-
- Analysis: This algorithm is known to be exponential in the worst case, for example
- in the case of converting an expression in DNF form to CNF.
-
  NB: We can easily extend this algorithm to handle remaining boolean operators
  implication, equivalence, and xor, etc.
 */
