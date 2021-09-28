@@ -1,12 +1,7 @@
-import Dependencies._
+ThisBuild / scalaVersion := "2.13.6"
 
-lazy val root = (project in file(".")).
-  settings(
-    inThisBuild(List(
-      organization := "com.bpr",
-      scalaVersion := "2.12.1",
-      version      := "0.1.0-SNAPSHOT"
-    )),
+lazy val hello = (project in file("."))
+  .settings(
     name := "boolexpr",
-    libraryDependencies += scalaTest % Test
+    libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.7" % Test,
   )
